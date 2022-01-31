@@ -14,10 +14,11 @@ class CreateUrlVerifies extends Migration
     public function up()
     {
         Schema::create('url_verifies', function (Blueprint $table) {
-            $table->integer('id')->unsigned()->primary();
-            $table->string('url', 70)->nullable(false);
-            $table->string('response', 10000)->nullable(false);
-            $table->integer('http')->nullable(false);
+            $table->id();
+            $table->string('url');
+            $table->longText('response');
+            $table->integer('http');
+            $table->integer('user_id')->nullable();
             $table->timestamps();
         });
     }

@@ -4,29 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\Response;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
+use App\Models\VerifyUrl;
 class VerifyUrlController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return ['tryed'];
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,9 +16,28 @@ class VerifyUrlController extends Controller
      */
     public function store(Request $request)
     {
-        $client = new \GuzzleHttp\Client();
-        $client->get('google.com.br');
-        return ['passou' => 'test'];
+        $url = $request->url;
+        try {
+            $response = Http::get($url);
+
+        } catch (\Throwable $th) {
+            return ['failed'=>'invalid URL'];
+        }
+        $data = [
+            'response' => [
+                'url'=> $url,
+                'response'=> utf8_encode($response->body()),
+                'http'=> $response->status(),
+            ]
+        ];
+        $user = '';
+        try {
+            $save =  VerifyUrl::updateOrCreate(['url'=>$url, 'user_id'=> $user], $data['response']);
+        } catch (\Throwable $th) {
+            return 'There a error on save';
+        }
+
+        return $data;
     }
 
     /**
@@ -48,7 +48,9 @@ class VerifyUrlController extends Controller
      */
     public function show($id)
     {
-        //
+        $id =  VerifyUrl::findOrFail($id);
+
+
     }
 
     /**
