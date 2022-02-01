@@ -2,11 +2,10 @@
 
 namespace App\Schedules;
 
-use Illuminate\Http\Request;
 use App\Models\Url;
 use App\Models\VerifyUrl;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\DB;
 
 class UrlVerifysSchedule
 {
@@ -28,16 +27,19 @@ class UrlVerifysSchedule
         }
     }
 
-    /**
-     * Salva no banco, os dados das URLS pesquisadas
-     *
-     * @param [type] $urlResponse
-     * @param [type] $urlSearch
-     * @return void
-     */
+/**
+ * Undocumented function
+ *
+ * @param [type] $urlResponse response do guzzle
+ * @param [type] $urlSearch onde teremos a url pesquisada
+ * @param [type] $id id da URL em urls
+ * @return void
+ */
     public function UpdateCreateDB($urlResponse, $urlSearch, $id)
     {
-
+        DB::table('urls')
+              ->where('id', $id)
+              ->update(['tested' => true]);
         $urlResponse = $urlResponse['response'];
         $data = [
             'response' => [

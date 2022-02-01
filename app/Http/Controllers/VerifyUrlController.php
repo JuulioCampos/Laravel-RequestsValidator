@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
-use App\Models\VerifyUrl;
+use App\Models\Url;
 class VerifyUrlController extends Controller
 {
     /**
@@ -17,25 +15,7 @@ class VerifyUrlController extends Controller
     public function store(Request $request)
     {
         $url = $request->url;
-        try {
-            $response = Http::get($url);
 
-        } catch (\Throwable $th) {
-            return ['failed'=>'invalid URL'];
-        }
-        $data = [
-            'response' => [
-                'url'=> $url,
-                'response'=> utf8_encode($response->body()),
-                'http'=> $response->status(),
-            ]
-        ];
-        $user = '';
-        try {
-            $save =  VerifyUrl::updateOrCreate(['url'=>$url, 'user_id'=> $user], $data['response']);
-        } catch (\Throwable $th) {
-            return 'There a error on save';
-        }
 
         return $data;
     }
