@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUrlVerifies extends Migration
+class CreateUrls extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateUrlVerifies extends Migration
      */
     public function up()
     {
-        Schema::create('url_verifies', function (Blueprint $table) {
+        Schema::create('urls', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
-            $table->longText('response');
-            $table->integer('http');
-            $table->integer('user_id')->nullable();
+            $table->text('url');
+            $table->boolean('tested');
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
+            //foreign keys
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateUrlVerifies extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('url_verifies');
+        Schema::dropIfExists('urls');
     }
 }
