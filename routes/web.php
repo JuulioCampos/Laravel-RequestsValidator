@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\VerifyUrl;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,5 +19,7 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
+    $data = VerifyUrl::get()->all();
+    collect($data)->toArray();
+    return view('dashboard', $data)->with(['data' => $data]);
 })->name('dashboard');
