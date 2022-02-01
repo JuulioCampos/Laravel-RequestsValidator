@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Url as UrlModel;
+use Illuminate\Support\Facades\Log;
+
 class VerifyUrlController extends Controller
 {
     /**
@@ -16,8 +18,15 @@ class VerifyUrlController extends Controller
     {
         //tratado, pois utilizando postman, terei menos trabalho para autentica-lo por lá
         auth()->check() ? $userId = auth()->user()->id : $userId = 1;
-
-        $urls = $request->url;
+        if (is_array($request)) {
+            $urls = $request->url;
+        }else {
+            $urls = [
+                'url'=> [
+                   [1=>$request->url]
+                ]
+            ];
+        }
         foreach($urls as $key => $url) {
             $data = [
                 'url' => $url,
@@ -26,9 +35,10 @@ class VerifyUrlController extends Controller
             ];
             try {
                 $createData = UrlModel::create($data);
-                return ['success' => 'database updated'];
+                return redirect('/dashboard?success=true');
             } catch (\Throwable $th) {
-                return ['error'=> $th->getMessage()];
+                Log::info(['error'=> $th->getMessage()]);
+                return redirect('/dashboard?success=false');
             }
         }
 

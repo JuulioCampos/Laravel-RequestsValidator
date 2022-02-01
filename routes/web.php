@@ -21,6 +21,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     $data = collect(VerifyUrl::get()->all())->toArray();
-    $urls = collect(Url::get()->all())->toArray();
+    $urls = collect(Url::get()->where('user_id', '=', auth()->user()->id))->toArray();
     return view('dashboard', $data)->with(['data' => $data, 'urls'=> $urls]);
 })->name('dashboard');
