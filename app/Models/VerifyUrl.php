@@ -19,7 +19,7 @@ class VerifyUrl extends Model
         return $this->hasMany(Url::class, 'id','url_id');
     }
 
-    public function SearchUrl(string $url)
+    public static function SearchUrl(string $url)
     {
         try {
             $response = Http::get($url);

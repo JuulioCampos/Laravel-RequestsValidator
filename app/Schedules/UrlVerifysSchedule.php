@@ -20,10 +20,10 @@ class UrlVerifysSchedule
 
         foreach ($urls as $urlToSearch) {
             try {
-                $responseUrl = VerifyUrl::Search($urlToSearch->url);
-                $this->UpdateCreateDB($responseUrl, $urlToSearch);
+                $responseUrl = VerifyUrl::SearchUrl($urlToSearch['url']);
+                $this->UpdateCreateDB($responseUrl, $urlToSearch, $urlToSearch['id']);
             } catch (\Throwable $th) {
-               Log::info('ERROR',[ 'URL '=>$urlToSearch, 'message'=>$th->getMessage() ]);
+               Log::info('ERROR',[ 'URL '=>$urlToSearch['url'], 'message'=>$th->getMessage() ]);
             }
         }
     }
@@ -35,19 +35,23 @@ class UrlVerifysSchedule
      * @param [type] $urlSearch
      * @return void
      */
-    public function UpdateCreateDB($urlResponse, $urlSearch)
+    public function UpdateCreateDB($urlResponse, $urlSearch, $id)
     {
+
+        $urlResponse = $urlResponse['response'];
         $data = [
             'response' => [
-                'url'=> $urlSearch,
+                'url'=> $urlSearch['url'],
                 'response'=> utf8_encode($urlResponse->body()),
                 'http'=> $urlResponse->status(),
+                'url_id' => $id
             ]
         ];
         try {
-            $save =  VerifyUrl::updateOrCreate(['url'=>$urlSearch], $data['response']);
+            $save =  VerifyUrl::insert($data['response']);
+
         } catch (\Throwable $th) {
-            return 'There a error on save';
+            Log::info('ERROR',[ 'URL '=>$data['response'], 'message'=>$th->getMessage() ]);
         }
     }
 }

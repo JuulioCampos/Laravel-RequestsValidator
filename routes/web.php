@@ -22,7 +22,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     $data = VerifyUrl::get()->all();
     $urls = collect(Url::get()->all());
-    dd($urls->toArray());
+    $urls = $urls->toArray();
     collect($data)->toArray();
-    return view('dashboard', $data)->with(['data' => $data]);
+    return view('dashboard', $data)->with(['data' => $data, 'urls'=> $urls]);
 })->name('dashboard');
