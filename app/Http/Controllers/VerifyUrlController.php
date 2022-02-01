@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Url;
+use App\Models\Url as UrlModel;
 class VerifyUrlController extends Controller
 {
     /**
@@ -14,10 +14,24 @@ class VerifyUrlController extends Controller
      */
     public function store(Request $request)
     {
-        $url = $request->url;
+        //tratado, pois utilizando postman, terei menos trabalho para autentica-lo por lá
+        auth()->check() ? $userId = auth()->user()->id : $userId = 1;
 
+        $urls = $request->url;
+        foreach($urls as $key => $url) {
+            $data = [
+                'url' => $url,
+                'tested'=> 0,
+                'user_id'=> $userId
+            ];
+            try {
+                $createData = UrlModel::create($data);
+                return ['success' => 'database updated'];
+            } catch (\Throwable $th) {
+                return ['error'=> $th->getMessage()];
+            }
+        }
 
-        return $data;
     }
 
     /**
@@ -28,7 +42,6 @@ class VerifyUrlController extends Controller
      */
     public function show($id)
     {
-        $id =  VerifyUrl::findOrFail($id);
 
 
     }

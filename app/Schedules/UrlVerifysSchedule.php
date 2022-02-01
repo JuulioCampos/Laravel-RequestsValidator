@@ -13,10 +13,11 @@ class UrlVerifysSchedule
 
     public function __invoke()
     {
-        $arrayUrls = collect(Url::get()->all());
+        $arrayUrls = collect(Url::get()->where('tested', '=', 0));
         //captura urls a serem usadas
         $urls = $arrayUrls->toArray();
-
+        //caso esteja vazio, já vai parar o schedule
+        if(empty($arrayUrls) || !isset($arrayUrls)) exit;
         foreach ($urls as $urlToSearch) {
             try {
                 $responseUrl = VerifyUrl::SearchUrl($urlToSearch['url']);
