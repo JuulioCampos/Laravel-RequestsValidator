@@ -71,7 +71,7 @@
                                         @endforeach
                                     </td>
                                     <td class="px-3">
-                                        <button style="background: lightgreen; border-radius: 10px; padding:2px 5px "
+                                        <button onclick="confirm('deseja adicionar url?') style="background: lightgreen; border-radius: 10px; padding:2px 5px "
                                             class=" text-center bg-sky-600 hover:bg-sky-700  hover:bg-green-400 active:bg-violet-600 focus:outline-none focus:ring focus:ring-green-300">
                                             <a href="http://{{ $url['url'] }}" target="_blank"> Verificar
                                             </a></button>
@@ -88,7 +88,7 @@
                                         {{ method_field('DELETE') }}
 
                                         <div class="form-group">
-                                            <input style="color:black;  background: rgb(250, 95, 81); border-radius: 10px; padding:2px 5px " type="submit" class="btn btn-danger delete-user" value="Excluir">
+                                            <input onclick="confirm('deseja apagar url?')" style="color:black;  background: rgb(250, 95, 81); border-radius: 10px; padding:2px 5px " type="submit" class="btn btn-danger delete-user" value="Excluir">
                                         </div>
                                     </form>
                                 </td>
