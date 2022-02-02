@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 class CreateUrls extends Migration
 {
     /**
@@ -19,6 +18,7 @@ class CreateUrls extends Migration
             $table->boolean('tested');
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
             //foreign keys
             $table->foreign('user_id')->references('id')->on('users');
         });

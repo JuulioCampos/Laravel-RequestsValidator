@@ -13,26 +13,14 @@
                 <div class="row">
                     <h3 style="color:rgba(0, 0, 0, 0.592)" class="text-center p-2">*apenas 1 url por vez </h3>
                     <div class="col-12">
-                        <form method="POST" action="api/verify">
+                        <form method="POST" action="verify">
                             @csrf
                             <label for="title">url</label>
 
-                            <input name="url" id="title" type="text" class="@error('title') is-invalid @enderror input read-only:bg-gray-100 rounded-lg">
-                            <button style="background: lightblue; border-radius: 10px; padding:2px 5px " type="submit" class="btn btn-primary ">Enviar</button>
-
-                            @error('title')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </form>
-                    </div>
-
-                    <h3 style="color:rgba(0, 0, 0, 0.592)" class="text-center p-2">*varias url por vez (json) </h3>
-                    <div class="col-12">
-                        <form method="POST" action="api/verify">
-                            @csrf
-                            <label for="title">url</label>
-                            <textarea id="title" type="text" class="@error('title') is-invalid @enderror input read-only:bg-gray-100 rounded-lg"> </textarea>
-                            <button style="background: lightblue; border-radius: 10px; padding:2px 5px " type="submit" class="btn btn-primary ">Enviar</button>
+                            <input name="url" id="title" type="text"
+                                class="@error('title') is-invalid @enderror input read-only:bg-gray-100 rounded-lg">
+                            <button style="background: lightblue; border-radius: 10px; padding:2px 5px " type="submit"
+                                class="btn btn-primary ">Enviar</button>
 
                             @error('title')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -58,6 +46,7 @@
                             <th scope="col">Testado</th>
                             <th scope="col">HTTP</th>
                             <th scope="col">Conteúdo</th>
+                            <th scope="col">Excluir </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,10 +71,10 @@
                                         @endforeach
                                     </td>
                                     <td class="px-3">
-                                        <button href="{{ $url['url'] }}"
-                                            style="background: lightgreen; border-radius: 10px; padding:2px 5px "
+                                        <button style="background: lightgreen; border-radius: 10px; padding:2px 5px "
                                             class=" text-center bg-sky-600 hover:bg-sky-700  hover:bg-green-400 active:bg-violet-600 focus:outline-none focus:ring focus:ring-green-300">
-                                            Verificar </button>
+                                            <a href="http://{{ $url['url'] }}" target="_blank"> Verificar
+                                            </a></button>
                                     </td>
                                 @else
                                     <td class="p-3 " style="color:red; font-weight: bold"> NÃO VERIFICADO
@@ -93,8 +82,16 @@
                                     <td> &nbsp; </td>
 
                                 @endif
+                                <td class="px-2">
+                                    <form method="POST" action="verify/{{$url['id']}}">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
 
-
+                                        <div class="form-group">
+                                            <input style="color:black;  background: rgb(250, 95, 81); border-radius: 10px; padding:2px 5px " type="submit" class="btn btn-danger delete-user" value="Excluir">
+                                        </div>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

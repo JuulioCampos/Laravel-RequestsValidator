@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 class CreateUrlVerifies extends Migration
 {
     /**
@@ -20,7 +19,7 @@ class CreateUrlVerifies extends Migration
             $table->integer('http');
             $table->bigInteger('url_id')->unsigned();
             $table->timestamps();
-
+            $table->softDeletes();
             //foreign keys
             $table->foreign('url_id')->references('id')->on('urls');
 
